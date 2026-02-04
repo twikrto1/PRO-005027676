@@ -12,6 +12,6 @@ provider "vcd" {
   password             = var.vcd_password
   auth_type            = "integrated"
   org                  = var.vcd_org
-  url                  = var.vcd_url
+  url                  = "https://vcd-pod-bravo.swisscomcloud.com/api"
   allow_unverified_ssl = true
 }
