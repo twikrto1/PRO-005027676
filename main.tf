@@ -17,8 +17,8 @@ provider "vcd" {
 }
 
 # Beispiel: Liste aller Kataloge
-data "vcd_catalogs" "all" {}
+data "vcd_catalog" "all" {}
 
 output "catalogs" {
-  value = data.vcd_catalog.all.names
+  value = data.vcd_catalogs.all.names
 }
