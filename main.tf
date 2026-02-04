@@ -15,10 +15,3 @@ provider "vcd" {
   url                  = var.vcd_url
   allow_unverified_ssl = true
 }
-
-# Beispiel: Liste aller Kataloge
-data "vcd_catalog" "all" {}
-
-output "catalogs" {
-  value = data.vcd_catalogs.all.names
-}
