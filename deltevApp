@@ -1,0 +1,1 @@
+terraform destroy -target=vmware_vcd_vapp.tf-test-vapp
