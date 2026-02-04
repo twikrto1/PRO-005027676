@@ -1,39 +1,33 @@
-# vDC Network - Isolated
-resource "vcd_network_isolated" "demo_vdc_network_isolated" {
-  name         				= "demo_vdc_network_isolated"
-  gateway      				= "10.10.10.1"
-  dns1                     = "8.8.8.8"
-
-  static_ip_pool {
-    start_address 			= "10.10.10.2"
-    end_address   			= "10.10.10.254"
+terraform {
+  required_providers {
+    vcd = {
+      source  = "vmware/vcd"
+      version = "~> 3.13"
+    }
   }
 }
 
-# Sample vApp
-resource "vcd_vapp" "demo_vapp_1" {
-  name 						= "demo_vapp_1"
-  description 				= "Demo vAPP with demo_vdc_network_isolated network"
-  depends_on 				= ["vcd_network_isolated.demo_vdc_network_isolated"] // vApp will be created after network is created.
+provider "vcd" {
+  user                 = var.vcd_user
+  password             = var.vcd_password
+  auth_type            = "integrated"
+  org                  = var.vcd_org
+  url                  = var.vcd_url
+  allow_unverified_ssl = true
 }
 
-# Sample VM
-resource "vcd_vapp_vm" "demo_vm_1" {
-  vapp_name 				= "${vcd_vapp.demo_vapp_1.name}"
-  name 						= "demo_vm_1"
-  catalog_name 				= "${var.vcd_catalog}"
-  template_name 			= "${var.vcd_template}"
-  memory					= 512 // Momory in MBs
-  cpus						= 1 // Number of vCPUs
+# 1️⃣ Eine leere vApp im VDC "Tomori" anlegen
+resource "vcd_vapp" "test_vapp" {
+  name     = "tf-test-vapp"
+  org      = var.vcd_org
+  vdc      = "Tomori"   # <- dein VDC-Name
+  power_on = false
+}
 
-  power_on 					= "true"
-
-  network {
-    type					= "org"
-    name					= "${vcd_network_isolated.demo_vdc_network_isolated.name}"
-    ip_allocation_mode		= "POOL"
-  }
-
-  accept_all_eulas 			= "true"
-  depends_on       			= ["vcd_network_isolated.demo_vdc_network_isolated", "vcd_vapp.demo_vapp_1"] // VM will be created after vApp and network are created.
+# 2️⃣ Output zur Kontrolle
+output "vapp_name" {
+  value = vcd_vapp.test_vapp.name
+}
+output "vapp_vdc" {
+  value = vcd_vapp.test_vapp.vdc
 }
