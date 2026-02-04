@@ -20,7 +20,7 @@ provider "vcd" {
 resource "vcd_vapp" "test_vapp" {
   name     = "tf-test-vapp"
   org      = var.vcd_org
-  vdc      = "Tomori"   # <- dein VDC-Name
+  vdc      = "Tomor"   # <- dein VDC-Name
   power_on = false
 }
 
