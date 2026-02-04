@@ -20,5 +20,5 @@ provider "vcd" {
 data "vcd_catalogs" "all" {}
 
 output "catalogs" {
-  value = data.vcd_catalogs.all.names
+  value = data.vcd_catalog.all.names
 }
